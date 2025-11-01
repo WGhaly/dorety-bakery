@@ -1,0 +1,706 @@
+// Dorety Bakery Database Schema
+// Following Emad V8.0 methodology and NextAuth.js requirements
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ============================================================================
+// AUTHENTICATION & USER MANAGEMENT (NextAuth.js Compatible)
+// ============================================================================
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  phone         String?         @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?         // For credentials provider
+  role          Role            @default(CUSTOMER)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  // NextAuth.js relations
+  accounts      Account[]
+  sessions      Session[]
+  
+  // Business relations
+  addresses             Address[]
+  orders                Order[]
+  cart                  Cart?
+  financialAdjustments  FinancialAdjustment[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  STAFF
+}
+
+// ============================================================================
+// PRODUCT CATALOG
+// ============================================================================
+
+model Category {
+  id           String    @id @default(cuid())
+  name         String
+  slug         String    @unique
+  description  String?
+  displayOrder Int       @default(0)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  products     Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id                      String    @id @default(cuid())
+  name                    String
+  slug                    String    @unique
+  shortDescription        String?
+  longDescription         String?
+  price                   Float     // Changed from Decimal to Float for SQLite
+  cost                    Float?    // Changed from Decimal to Float for SQLite
+  sku                     String?   @unique
+  categoryId              String
+  media                   String    // JSON string for image URLs
+  isActive                Boolean   @default(true)
+  badges                  String?   // JSON string for badges array
+  
+  // Inventory tracking
+  inventoryTrackingEnabled Boolean  @default(true)
+  stockQty                Int?      @default(0)
+  lowStockThreshold       Int?      @default(5)
+  
+  // Nutrition/allergens
+  nutrition               String?   // Removed @db.Text for SQLite
+  allergens               String?   // Removed @db.Text for SQLite
+  
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  // Relations
+  category                Category  @relation(fields: [categoryId], references: [id])
+  cartItems               CartItem[]
+  orderItems              OrderItem[]
+
+  @@map("products")
+}
+
+// ============================================================================
+// ADDRESS MANAGEMENT
+// ============================================================================
+
+model Address {
+  id         String  @id @default(cuid())
+  customerId String
+  label      String  // "Home", "Office", etc.
+  line1      String
+  line2      String?
+  city       String
+  area       String?
+  notes      String?
+  isDefault  Boolean @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  customer   User    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  orders     Order[]
+
+  @@map("addresses")
+}
+
+// ============================================================================
+// SHOPPING CART
+// ============================================================================
+
+model Cart {
+  id         String     @id @default(cuid())
+  customerId String     @unique
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  customer   User       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items      CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id            String   @id @default(cuid())
+  cartId        String
+  productId     String
+  nameSnapshot  String   // Product name at time of adding
+  priceSnapshot Float    // Price at time of adding - changed to Float for SQLite
+  quantity      Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  cart          Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product       Product  @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+// ============================================================================
+// ORDER MANAGEMENT
+// ============================================================================
+
+model Order {
+  id                     String          @id @default(cuid()) // Human-friendly: HBK-2025-000123
+  orderNumber            String          @unique // Human-readable: DBY-2025-0001
+  customerId             String
+  placedAt               DateTime        @default(now())
+  
+  // Fulfillment
+  fulfillmentType        FulfillmentType
+  deliveryAddressSnapshot String?        // JSON string for address snapshot
+  pickupLocationSnapshot  String?        // JSON string for pickup location snapshot
+  
+  // Status management with timestamps
+  status                 OrderStatus     @default(PENDING)
+  confirmedAt            DateTime?
+  preparingAt            DateTime?
+  readyAt                DateTime?
+  shippedAt              DateTime?
+  deliveredAt            DateTime?
+  cancelledAt            DateTime?
+  
+  // Payment tracking
+  paymentMethod          PaymentMethod   @default(COD)
+  paymentStatus          PaymentStatus   @default(UNPAID)
+  codCollectedAt         DateTime?
+  codAmount              Float?
+  
+  // Pricing - changed to Float for SQLite
+  deliveryFee            Float           @default(0)
+  subTotal               Float
+  discountAmount         Float           @default(0)
+  taxAmount              Float           @default(0)
+  total                  Float
+  
+  // Timing and delivery
+  requestedDeliveryTime  DateTime?
+  estimatedDeliveryTime  DateTime?
+  actualDeliveryTime     DateTime?
+  deliveryWindow         String?         // "Morning", "Afternoon", "Evening"
+  
+  // Tracking
+  trackingNumber         String?
+  
+  // Notes and special instructions
+  notesCustomer          String?         // Customer's special instructions
+  notesAdmin             String?         // Admin/staff notes
+  specialInstructions    String?         // Delivery instructions
+  
+  // Metadata for reporting
+  source                 String?         // "web", "mobile", "phone"
+  priority               OrderPriority   @default(NORMAL)
+  
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+
+  // Relations
+  customer               User            @relation(fields: [customerId], references: [id])
+  deliveryAddress        Address?        @relation(fields: [deliveryAddressId], references: [id])
+  deliveryAddressId      String?
+  items                  OrderItem[]
+  timeline               OrderStatusHistory[]
+  ledgerEntries          LedgerEntry[]
+  codTracking            CODTracking?
+  financialAdjustments   FinancialAdjustment[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id            String  @id @default(cuid())
+  orderId       String
+  productId     String
+  nameSnapshot  String  // Product name at time of order
+  priceSnapshot Float   // Price at time of order - changed to Float for SQLite
+  quantity      Int
+  lineTotal     Float   // Changed to Float for SQLite
+
+  order         Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product       Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(cuid())
+  orderId   String
+  status    OrderStatus
+  changedBy String?     // User ID who made the change
+  notes     String?
+  timestamp DateTime    @default(now())
+
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_status_history")
+}
+
+enum FulfillmentType {
+  DELIVERY
+  PICKUP
+}
+
+enum OrderStatus {
+  PENDING       // Order placed, awaiting confirmation
+  CONFIRMED     // Order confirmed, payment validated
+  PREPARING     // Items being prepared/baked
+  READY         // Ready for pickup/delivery
+  OUT_FOR_DELIVERY // On the way to customer
+  DELIVERED     // Successfully delivered
+  PICKED_UP     // Successfully picked up
+  CANCELLED     // Cancelled by customer/admin
+  REFUNDED      // Money refunded
+}
+
+enum OrderPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum PaymentMethod {
+  COD // Cash on Delivery
+}
+
+enum PaymentStatus {
+  UNPAID       // Payment not collected yet
+  COLLECTED    // COD collected from customer
+  RECONCILED   // Payment reconciled in books
+  REFUNDED     // Payment refunded
+}
+
+// ============================================================================
+// FINANCE & LEDGER SYSTEM
+// Following double-entry bookkeeping principles from Beancount and ErpSaas
+// ============================================================================
+
+// Chart of Accounts - Define all possible financial accounts
+model ChartOfAccount {
+  id          String         @id @default(cuid())
+  code        String         @unique        // Account code (e.g., "1000", "2000")
+  name        String                        // Account name (e.g., "Cash", "Accounts Receivable")
+  type        AccountType                   // Asset, Liability, Equity, Revenue, Expense
+  category    AccountCategory               // More specific categorization
+  parentId    String?                       // For hierarchical account structure
+  isActive    Boolean        @default(true)
+  description String?                       // Account description
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relations
+  parent      ChartOfAccount?       @relation("AccountHierarchy", fields: [parentId], references: [id])
+  children    ChartOfAccount[]      @relation("AccountHierarchy")
+  ledgerEntries LedgerEntry[]
+
+  @@map("chart_of_accounts")
+}
+
+enum AccountType {
+  ASSET      // Cash, Inventory, Accounts Receivable
+  LIABILITY  // Accounts Payable, COD Outstanding
+  EQUITY     // Owner's Equity, Retained Earnings
+  REVENUE    // Sales, Delivery Fees
+  EXPENSE    // Cost of Goods Sold, Operating Expenses
+}
+
+enum AccountCategory {
+  // Assets
+  CASH
+  ACCOUNTS_RECEIVABLE
+  INVENTORY
+  PREPAID_EXPENSES
+  FIXED_ASSETS
+  
+  // Liabilities
+  ACCOUNTS_PAYABLE
+  COD_OUTSTANDING
+  ACCRUED_EXPENSES
+  
+  // Equity
+  OWNERS_EQUITY
+  RETAINED_EARNINGS
+  
+  // Revenue
+  PRODUCT_SALES
+  DELIVERY_FEES
+  SERVICE_REVENUE
+  
+  // Expenses
+  COST_OF_GOODS_SOLD
+  OPERATING_EXPENSES
+  DELIVERY_EXPENSES
+  ADMINISTRATIVE_EXPENSES
+}
+
+// Enhanced Ledger Entry for Double-Entry Bookkeeping
+model LedgerEntry {
+  id            String           @id @default(cuid())
+  transactionId String                     // Groups entries into transactions (double-entry pairs)
+  orderId       String?
+  accountId     String                     // Reference to Chart of Accounts
+  amount        Float                      // Always positive - direction determined by account type and operation
+  direction     LedgerDirection            // DEBIT or CREDIT
+  description   String                     // Transaction description
+  referenceType LedgerReferenceType?       // What this entry references
+  referenceId   String?                    // ID of referenced entity
+  
+  // Audit trail
+  createdBy     String?                    // User ID who created entry
+  createdAt     DateTime         @default(now())
+  
+  // Reconciliation
+  isReconciled  Boolean          @default(false)
+  reconciledAt  DateTime?
+  reconciledBy  String?
+  
+  // Relations
+  order         Order?           @relation(fields: [orderId], references: [id])
+  account       ChartOfAccount   @relation(fields: [accountId], references: [id])
+
+  @@map("ledger_entries")
+}
+
+enum LedgerReferenceType {
+  ORDER          // Reference to an order
+  PAYMENT        // Reference to a payment
+  ADJUSTMENT     // Manual adjustment
+  INVENTORY      // Inventory movement
+  EXPENSE        // Business expense
+  REFUND         // Customer refund
+}
+
+enum LedgerDirection {
+  DEBIT
+  CREDIT
+}
+
+// COD Tracking for Cash on Delivery Management
+model CODTracking {
+  id              String         @id @default(cuid())
+  orderId         String         @unique
+  amountDue       Float                    // Original COD amount
+  amountCollected Float          @default(0) // Amount actually collected
+  collectedAt     DateTime?                // When payment was collected
+  collectedBy     String?                  // Who collected the payment
+  
+  // Reconciliation
+  isReconciled    Boolean        @default(false)
+  reconciledAt    DateTime?
+  reconciledBy    String?
+  
+  // Variance tracking
+  variance        Float          @default(0) // Difference between due and collected
+  varianceReason  String?                  // Why there was a variance
+  
+  notes           String?                  // Additional notes
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  order           Order          @relation(fields: [orderId], references: [id])
+
+  @@map("cod_tracking")
+}
+
+// Financial Adjustments for Manual Corrections
+model FinancialAdjustment {
+  id              String         @id @default(cuid())
+  type            AdjustmentType
+  amount          Float
+  reason          String                   // Required reason for adjustment
+  description     String?                  // Additional details
+  
+  // References
+  orderId         String?                  // If related to an order
+  customerId      String?                  // If related to a customer
+  
+  // Approval workflow
+  status          AdjustmentStatus @default(PENDING)
+  requestedBy     String                   // Who requested the adjustment
+  approvedBy      String?                  // Who approved the adjustment
+  approvedAt      DateTime?
+  
+  // Ledger impact
+  transactionId   String?                  // Reference to ledger transaction
+  
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  order           Order?         @relation(fields: [orderId], references: [id])
+  customer        User?          @relation(fields: [customerId], references: [id])
+
+  @@map("financial_adjustments")
+}
+
+enum AdjustmentType {
+  COD_SHORTAGE     // Less money collected than expected
+  COD_OVERAGE      // More money collected than expected
+  DELIVERY_FEE_WAIVER // Waiving delivery fee
+  PRODUCT_DISCOUNT    // Product discount adjustment
+  REFUND_ADJUSTMENT   // Refund processing adjustment
+  INVENTORY_ADJUSTMENT // Inventory value correction
+  OTHER               // Other adjustments
+}
+
+enum AdjustmentStatus {
+  PENDING          // Awaiting approval
+  APPROVED         // Approved and processed
+  REJECTED         // Rejected
+  CANCELLED        // Cancelled by requestor
+}
+
+// ============================================================================
+// SYSTEM SETTINGS
+// ============================================================================
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String // Removed @db.Text for SQLite
+  
+  @@map("settings")
+}
+
+model NotificationTemplate {
+  id      String @id @default(cuid())
+  name    String @unique
+  subject String
+  body    String // Removed @db.Text for SQLite
+  isActive Boolean @default(true)
+  
+  @@map("notification_templates")
+}
+
+// ============================================================================
+// CONTENT MANAGEMENT SYSTEM (CMS)
+// ============================================================================
+
+model Page {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String      @unique
+  content     String      // Main page content in HTML/Markdown
+  excerpt     String?     // Page summary for meta description
+  type        PageType    @default(STATIC)
+  status      PageStatus  @default(DRAFT)
+  
+  // SEO fields
+  metaTitle       String?     // Custom SEO title (overrides page title)
+  metaDescription String?     // Custom meta description (overrides excerpt)
+  metaKeywords    String?     // SEO keywords
+  openGraphImage  String?     // Custom OG image URL
+  canonicalUrl    String?     // Custom canonical URL
+  
+  // Display settings
+  showInNavigation Boolean    @default(false)
+  navigationOrder  Int?       // Order in navigation menu
+  isHomePage      Boolean     @default(false)
+  
+  // Content features
+  featuredImage   String?     // Hero/featured image
+  bannerConfig    String?     // JSON configuration for banner display
+  sections        String?     // JSON configuration for page sections
+  
+  // Publishing
+  publishedAt     DateTime?
+  createdBy       String?     // Admin user who created the page
+  updatedBy       String?     // Admin user who last updated
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@map("pages")
+}
+
+enum PageType {
+  STATIC          // About, Contact, FAQ, etc.
+  LANDING         // Special landing pages
+  POLICY          // Terms, Privacy, etc.
+  BLOG            // Blog posts (future feature)
+}
+
+enum PageStatus {
+  DRAFT           // Not published
+  PUBLISHED       // Live on site
+  ARCHIVED        // Hidden but not deleted
+}
+
+model Banner {
+  id              String        @id @default(cuid())
+  title           String
+  subtitle        String?
+  content         String?       // Banner description/content
+  imageUrl        String?       // Banner background image
+  buttonText      String?       // CTA button text
+  buttonUrl       String?       // CTA button URL
+  
+  // Display settings
+  isActive        Boolean       @default(true)
+  priority        Int           @default(0)  // Higher numbers = higher priority
+  startDate       DateTime?     // When banner should start showing
+  endDate         DateTime?     // When banner should stop showing
+  
+  // Targeting
+  targetPages     String?       // JSON array of pages where banner should show
+  targetUserType  TargetUserType @default(ALL)
+  
+  // Analytics
+  impressions     Int           @default(0)
+  clicks          Int           @default(0)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("banners")
+}
+
+enum TargetUserType {
+  ALL             // Show to all visitors
+  CUSTOMERS       // Show only to logged-in customers
+  GUESTS          // Show only to non-logged-in users
+  NEW_CUSTOMERS   // Show only to customers with no orders
+}
+
+model SeoSetting {
+  id                  String    @id @default(cuid())
+  pageSlug            String    @unique // Page slug this SEO setting applies to
+  title               String?   // Page-specific title
+  description         String?   // Page-specific description
+  keywords            String?   // Page-specific keywords
+  canonicalUrl        String?   // Page-specific canonical URL
+  openGraphTitle      String?   // OG-specific title
+  openGraphDescription String?  // OG-specific description
+  openGraphImage      String?   // OG image URL
+  twitterTitle        String?   // Twitter-specific title
+  twitterDescription  String?   // Twitter-specific description
+  twitterImage        String?   // Twitter image URL
+  robots              String?   // Robots directive (index,follow etc.)
+  structuredData      String?   // JSON-LD structured data
+  
+  isActive            Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@map("seo_settings")
+}
+
+model SiteConfiguration {
+  id                String    @id @default(cuid())
+  key               String    @unique
+  value             String    // JSON string for complex configurations
+  category          ConfigCategory
+  description       String?   // Human-readable description
+  isPublic          Boolean   @default(false) // Whether this setting is publicly accessible
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@map("site_configuration")
+}
+
+enum ConfigCategory {
+  GENERAL           // Site name, logo, contact info
+  SEO               // Default SEO settings
+  SOCIAL            // Social media links
+  BUSINESS          // Business hours, location, contact
+  FEATURES          // Feature toggles
+  APPEARANCE        // Theme, colors, layout
+  ANALYTICS         // Google Analytics, tracking codes
+}
+
+model MediaLibrary {
+  id              String        @id @default(cuid())
+  filename        String        // Original filename
+  path            String        // Storage path/URL
+  mimeType        String        // image/jpeg, image/png, etc.
+  size            Int           // File size in bytes
+  alt             String?       // Alt text for accessibility
+  title           String?       // Image title
+  description     String?       // Image description
+  
+  // Dimensions for images
+  width           Int?
+  height          Int?
+  
+  // Usage tracking
+  isUsed          Boolean       @default(false)
+  usageCount      Int           @default(0)
+  
+  // Organization
+  tags            String?       // JSON array of tags
+  category        MediaCategory @default(GENERAL)
+  
+  uploadedBy      String?       // Admin user who uploaded
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("media_library")
+}
+
+enum MediaCategory {
+  GENERAL         // General uploads
+  PRODUCTS        // Product images
+  BANNERS         // Banner/hero images
+  PAGES           // Page content images
+  LOGOS           // Logo and branding
+  ICONS           // Icons and small graphics
+}

@@ -1,0 +1,189 @@
+
+> dorety-bakery@0.1.0 lint
+> eslint
+
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/admin/email/page.tsx
+  58:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/admin/finance/cod/page.tsx
+   9:3   warning  'AlertTriangleIcon' is defined but never used  @typescript-eslint/no-unused-vars
+  45:10  warning  'error' is assigned a value but never used     @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/admin/finance/page.tsx
+   8:3  warning  'TrendingDownIcon' is defined but never used  @typescript-eslint/no-unused-vars
+  13:3  warning  'CheckCircleIcon' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/admin/finance/reports/page.tsx
+  13:3  warning  'BarChart3Icon' is defined but never used  @typescript-eslint/no-unused-vars
+  15:3  warning  'EyeIcon' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/admin/login/page.tsx
+  52:14  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/admin/orders/page.tsx
+    9:3   warning  'Filter' is defined but never used                   @typescript-eslint/no-unused-vars
+   14:3   warning  'Calendar' is defined but never used                 @typescript-eslint/no-unused-vars
+   15:3   warning  'DollarSign' is defined but never used               @typescript-eslint/no-unused-vars
+   17:3   warning  'User' is defined but never used                     @typescript-eslint/no-unused-vars
+  103:10  warning  'error' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  119:10  warning  'isExporting' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  119:23  warning  'setIsExporting' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  266:9   warning  'getStatusIcon' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/admin/products/page.tsx
+  70:9  warning  'router' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/admin/settings/page.tsx
+  109:6   warning  React Hook useEffect has a missing dependency: 'filterSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  285:34  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                    react/no-unescaped-entities
+  482:27  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                    react/no-unescaped-entities
+  482:41  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                    react/no-unescaped-entities
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/addresses/route.ts
+  4:46  warning  'setDefaultAddressSchema' is defined but never used  @typescript-eslint/no-unused-vars
+  8:27  warning  'request' is defined but never used                  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/admin/banners/route.ts
+  22:7  warning  'UpdateBannerSchema' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/admin/dashboard-stats/route.ts
+  16:27  warning  'request' is defined but never used              @typescript-eslint/no-unused-vars
+  27:11  warning  'monthStart' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/admin/dashboard/route.ts
+  22:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/admin/pages/route.ts
+  27:7  warning  'UpdatePageSchema' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/cart/route.ts
+   17:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+  401:30  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/categories/[id]/route.ts
+    5:10  warning  'Prisma' is defined but never used             @typescript-eslint/no-unused-vars
+   27:11  warning  'ProductWithCounts' is defined but never used  @typescript-eslint/no-unused-vars
+  115:18  warning  'e' is defined but never used                  @typescript-eslint/no-unused-vars
+  121:18  warning  'e' is defined but never used                  @typescript-eslint/no-unused-vars
+  127:18  warning  'e' is defined but never used                  @typescript-eslint/no-unused-vars
+  133:18  warning  'e' is defined but never used                  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/categories/slug/[slug]/route.ts
+   83:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+   89:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+   95:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  101:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/finance/cod/route.ts
+  25:39  warning  'notes' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/finance/init-accounts/route.ts
+  22:13  warning  'force' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/orders/[id]/status/route.ts
+   73:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  241:20  warning  'e' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/products/[id]/route.ts
+  75:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  81:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  87:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  93:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/api/products/route.ts
+  107:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  113:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  119:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  125:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/cart/page.tsx
+  10:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/checkout/page.tsx
+  32:5  warning  'checkoutData' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/dashboard/page-client.tsx
+    5:10  warning  'redirect' is defined but never used                             @typescript-eslint/no-unused-vars
+   12:3   warning  'CreditCard' is defined but never used                           @typescript-eslint/no-unused-vars
+   13:3   warning  'Star' is defined but never used                                 @typescript-eslint/no-unused-vars
+   14:3   warning  'Clock' is defined but never used                                @typescript-eslint/no-unused-vars
+   17:3   warning  'Settings' is defined but never used                             @typescript-eslint/no-unused-vars
+   21:3   warning  'Calendar' is defined but never used                             @typescript-eslint/no-unused-vars
+   78:10  warning  'error' is assigned a value but never used                       @typescript-eslint/no-unused-vars
+  136:14  warning  'err' is defined but never used                                  @typescript-eslint/no-unused-vars
+  256:21  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  256:28  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/orders/[id]/page.tsx
+  76:6  warning  React Hook useEffect has a missing dependency: 'fetchOrder'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/page.tsx
+  3:10  warning  'BUSINESS_SCHEMA' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/products/[slug]/page-component.tsx
+  77:6  warning  React Hook useEffect has a missing dependency: 'fetchProduct'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/products/[slug]/page.tsx
+  69:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/products/category/[slug]/page-component.tsx
+   61:6   warning  React Hook useEffect has a missing dependency: 'fetchCategory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  287:34  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                   react/no-unescaped-entities
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/products/category/[slug]/page.tsx
+  60:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/products/page-client.tsx
+  113:6  warning  React Hook useEffect has a missing dependency: 'fetchProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/profile/page.tsx
+  12:3   warning  'Mail' is defined but never used                   @typescript-eslint/no-unused-vars
+  13:3   warning  'Phone' is defined but never used                  @typescript-eslint/no-unused-vars
+  72:12  warning  'resetProfile' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/reorder/[orderId]/page.tsx
+  14:3  warning  'Trash2' is defined but never used       @typescript-eslint/no-unused-vars
+  17:3  warning  'Clock' is defined but never used        @typescript-eslint/no-unused-vars
+  19:3  warning  'CheckCircle' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/app/settings-demo/page.tsx
+  19:11  warning  'isEnabled' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  21:11  warning  'getSetting' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/components/BannerDisplay.tsx
+  34:6  warning  React Hook useEffect has a missing dependency: 'fetchBanners'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/components/CMSNavigation.tsx
+  5:27  warning  'Settings' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/components/address/address-list.tsx
+  21:22  warning  'defaultAddress' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/hooks/use-cart.tsx
+  91:6  warning  React Hook useEffect has a missing dependency: 'refreshCart'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/hooks/useSettings.ts
+  47:17  warning  '_' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/lib/email/email-service.ts
+  185:50  warning  'orderNumber' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/lib/email/templates/order-confirmation.tsx
+  155:22  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  169:71  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/lib/email/templates/order-status-update.tsx
+  216:47  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/lib/email/templates/welcome.tsx
+  62:17  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/lib/ledger.ts
+  287:11  warning  'ledgerEntries' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/waseemghaly/Documents/PRG/Emad/VS Projects/Dorety Bakery Project/Fadi's Bakery App/src/types/next-auth.d.ts
+  1:8  warning  'NextAuth' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 92 problems (10 errors, 82 warnings)
+

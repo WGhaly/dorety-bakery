@@ -1,0 +1,20 @@
+{
+  "name": "Fadi's Bakery",
+  "short_name": "Fadi's Bakery",
+  "description": "Fresh baked goods, artisanal pastries, and delicious treats made with love and the finest ingredients",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ea580c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["food", "shopping", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr"
+}

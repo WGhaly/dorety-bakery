@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+body {
+  background: #ffffff !important; /* Force light background */
+  color: #171717 !important; /* Force dark text */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Input styling fixes for better visibility */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+textarea,
+select {
+  color: #374151 !important; /* Dark gray text */
+  background-color: #ffffff !important; /* White background */
+  border-color: #d1d5db !important; /* Light gray border */
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="number"]::placeholder,
+input[type="tel"]::placeholder,
+input[type="url"]::placeholder,
+input[type="search"]::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important; /* Medium gray placeholder */
+}
+
+/* Custom select styling fixes */
+select {
+  background-image: none;
+}
+
+/* Ensure dropdowns are properly positioned */
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+  border-color: rgb(245, 158, 11);
+}
+
+/* Fix z-index issues with dropdowns */
+.relative select {
+  position: relative;
+  z-index: 10;
+}
+
+/* Improve mobile responsiveness for form elements */
+@media (max-width: 640px) {
+  input, select, textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Loading animation for images */
+.image-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Better text truncation */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Text visibility improvements for light backgrounds */
+.text-gray-500 {
+  color: #6b7280 !important; /* Darker gray for better contrast */
+}
+
+.text-gray-400 {
+  color: #9ca3af !important; /* Slightly darker for better readability */
+}
+
+.text-gray-600 {
+  color: #4b5563 !important; /* Ensure good contrast */
+}
+
+/* Ensure proper contrast on white and light backgrounds */
+.bg-white .text-gray-500,
+.bg-gray-50 .text-gray-500,
+.bg-amber-50 .text-gray-500 {
+  color: #374151 !important; /* Much darker for better contrast */
+}
+
+.bg-white .text-gray-400,
+.bg-gray-50 .text-gray-400,
+.bg-amber-50 .text-gray-400 {
+  color: #6b7280 !important; /* Darker for better visibility */
+}
+
+.bg-white .text-gray-600,
+.bg-gray-50 .text-gray-600,
+.bg-amber-50 .text-gray-600 {
+  color: #374151 !important; /* Ensure strong contrast */
+}
+
+/* Specific improvements for checkout page elements */
+.checkout-text-secondary {
+  color: #374151 !important; /* Dark gray for secondary text */
+}
+
+.checkout-text-muted {
+  color: #6b7280 !important; /* Medium gray for muted text */
+}
+
+/* Radio button and checkbox improvements */
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: #d97706; /* Amber color for better visibility */
+}
+
+/* Link text improvements */
+a.text-gray-500,
+a.text-gray-400,
+a.text-gray-600 {
+  color: #374151 !important;
+}
+
+a.text-gray-500:hover,
+a.text-gray-400:hover,
+a.text-gray-600:hover {
+  color: #1f2937 !important;
+}
+
+/* Button text improvements */
+.btn-secondary {
+  background-color: #f3f4f6 !important;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+}
+
+.btn-secondary:hover {
+  background-color: #e5e7eb !important;
+  color: #1f2937 !important;
+}
+
+/* Ensure form labels are dark enough */
+label {
+  color: #374151 !important;
+}
+
+/* Table and list text improvements */
+td, th, li {
+  color: inherit;
+}
+
+.bg-white td,
+.bg-gray-50 td,
+.bg-white th,
+.bg-gray-50 th,
+.bg-white li,
+.bg-gray-50 li {
+  color: #374151 !important;
+}
+
+/* Card content text improvements */
+.bg-white p,
+.bg-gray-50 p,
+.bg-white span,
+.bg-gray-50 span {
+  color: inherit;
+}
+
+/* Specific text color overrides for better contrast */
+.text-muted-override {
+  color: #374151 !important;
+}
+
+.text-secondary-override {
+  color: #6b7280 !important;
+}
